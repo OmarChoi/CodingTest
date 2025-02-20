@@ -14,24 +14,16 @@ int main()
 	int nNum, length;
 	cin >> nNum >> length;
 
-	queue<int> numQueue;
 	priority_queue<pair<int, int>, vector<pair<int, int>>, 
 		greater<pair<int, int>>> MinQueue;	// <Value, Index>
 
 	for (int i = 1; i <= length - 1; ++i) {
 		MinQueue.emplace(MAX, -i);
-		numQueue.emplace(MAX);
 	}
 
-	int minValue = MAX;
 	for (int i = 0; i < nNum; ++i) {
 		int newNum = 0;
 		cin >> newNum;
-
-		int OutNum = numQueue.front();
-		numQueue.pop();
-
-		numQueue.emplace(newNum);
 		MinQueue.emplace(newNum, i);
 
 		while (!MinQueue.empty()) {
