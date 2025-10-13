@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 
 int main()
 {
@@ -10,37 +11,46 @@ int main()
 	std::cin >> str;
 
 	int nRemove = 0;
-	int remainB = 0;	// 뒤에 남아 있는 B가 존재하는지
-	int remainC = 0;	// 뒤에 남아 있는 C가 존재하는지
-	for (auto it = str.rbegin(); it != str.rend(); ++it) {
-		char ch = *it;
-		switch (ch) {
-		case 'A':
-		{
-			// 뒤에 남아 있는 B가 있었으면 해당 AB 제거
-			if (remainB > 0) {
-				remainB -= 1;
+	std::queue<int> aIndex;
+	std::queue<int> bIndex;
+	for (int i = 0; i < str.length(); ++i) {
+		char ch = str[i];
+
+		// A와 B는 index 저장
+		// C일 때 앞에 있는 B와 제거
+		if (ch == 'A') {
+			aIndex.emplace(i);
+		}
+		else if (ch == 'B') {
+			bIndex.emplace(i);
+		}
+		else if (ch == 'C') {
+			if (bIndex.size() > 0) {
+				bIndex.pop();
 				nRemove += 1;
 			}
-			break;
 		}
-		case 'B':
-		{
-			// 뒤에 C가 있으면 BC 제거
-			if (remainC > 0) {
-				remainC -= 1;
-				nRemove += 1;
+	}
+
+	while (!aIndex.empty() && !bIndex.empty()) {
+		int a = aIndex.front();
+		int b = bIndex.front();
+
+		// 맨 앞에 있는 a와 b 제거
+		if (a < b) {
+			aIndex.pop();
+			bIndex.pop();
+			nRemove += 1;
+		}
+
+		// 앞에 a가 없는 b 제거
+		while (a > b) {
+			bIndex.pop();
+			if (bIndex.empty()) {
+				break;
 			}
-			else {
-				remainB += 1;
-			}
-			break;
-		}
-		case 'C':
-		{
-			remainC += 1;
-			break;
-		}
+
+			b = bIndex.front();
 		}
 	}
 	std::cout << nRemove;
