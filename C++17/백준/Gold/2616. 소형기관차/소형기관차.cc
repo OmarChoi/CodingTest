@@ -10,18 +10,15 @@ int main()
 	int nCarriage;
 	std::cin >> nCarriage;
 
-	std::vector<int> customers(nCarriage + 1);
+	std::vector<int> prefixSum(nCarriage + 1);
 	for (int i = 1; i <= nCarriage; ++i) {
-		std::cin >> customers[i];
+		int customer = 0;
+		std::cin >> customer;
+		prefixSum[i] = prefixSum[i - 1] + customer;
 	}
 
 	int nCanCarry;
 	std::cin >> nCanCarry;
-	
-	std::vector<int> prefixSum(nCarriage + 1);
-	for (int i = 1; i <= nCarriage; ++i) {
-		prefixSum[i] = prefixSum[i - 1] + customers[i];
-	}
 
 	// i번쨰 객차까지 j개의 기관차를 이용해서 옮길 수 있는 최대 승객 수
 	std::vector<std::vector<int>> dp(nCarriage + 1, std::vector<int>(4, 0));
